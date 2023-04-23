@@ -2,6 +2,10 @@ import Exceptions.WrongLoginException;
 import Exceptions.WrongPasswordConfirmException;
 import Exceptions.WrongPasswordException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -17,17 +21,19 @@ public class Main {
         }
     }
 
-    public static boolean enter(String login, String password, String confirmPassword) throws WrongLoginException, WrongPasswordException, WrongPasswordConfirmException {
-        if (login.length() >= 20) {
+    public static void enter(String login, String password, String confirmPassword) throws WrongLoginException, WrongPasswordException, WrongPasswordConfirmException {
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9_]{1,20}");
+        Matcher loginMatcher = pattern.matcher(login);
+        Matcher passwordMatcher = pattern.matcher(password);
+        if (!loginMatcher.matches()) {
             throw new WrongLoginException();
         }
-        if (password.length() >= 20) {
+        if (!passwordMatcher.matches()) {
             throw new WrongPasswordException();
         }
         if (!password.equals(confirmPassword)) {
             throw new WrongPasswordConfirmException();
         }
-        return true;
-    }
 
+    }
 }
